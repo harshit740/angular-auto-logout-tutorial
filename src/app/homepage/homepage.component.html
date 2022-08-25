@@ -1,8 +1,8 @@
-<body >
+<div>
     <h1>HomePage</h1>
-    Focus State - {{focusState}}
+    Focus State - {{(focusState |async) ?"Focused":"Blured"}}
     <hr>
     {{massage}}
     <hr>
-    <span>{{timeLeftinseconds}} Seconds Left </span>
-  </body>
+    {{timeLeftinseconds | async}}
+</div>

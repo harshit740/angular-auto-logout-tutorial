@@ -1,43 +1,30 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { TimeService } from '../services/TimeService.service';
 @Component({
   selector: 'app-homepage',
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.css']
 })
 export class HomepageComponent implements OnInit {
+  focusState:any;
+  massage: String = ""
+  timeLeftinseconds: any;
+  title = 'angular-auto-logout-tutorial';
 
-  constructor(private router: Router) {}
+  constructor(private timerService: TimeService) { }
+
   ngOnInit(): void {
     this.focused();
+    this.focusState = this.timerService.focusState;
+    this.timeLeftinseconds = this.timerService.timerInterval;
   }
-  focusState: String = "";
-  massage: String = ""
-  timeLeftinseconds:any = 10;
-  x:any;
-  title = 'angular-auto-logout-tutorial';
+
   @HostListener('document:focus', ['$event'])
   focused(): void {
-    console.log('User is Active Focus Is gained');
-    this.focusState = "Gained"
-    this.massage = ""
-    clearInterval(this.x)
-    this.timeLeftinseconds=10;
+    this.timerService.setFocus(true)
   }
   @HostListener('document:blur', ['$event'])
   unFocused(): void {
-    console.log('User Is Inactive Focus Is lost timer starts now');
-    this.focusState = "Lost"
-    this.massage = "Timer Starts timeLeftinseconds"
-    // Time calculations for days, hours, minutes and seconds
-    this.x = setInterval(()=> {
-      this.timeLeftinseconds--
-      if(this.timeLeftinseconds < 0){
-        clearInterval(this.x)
-        this.router.navigate(["login"]);
-      }
-    },1000);
+    this.timerService.setFocus(false)
   }
-
-
 }
